@@ -1,0 +1,3 @@
+[submodule "deps/avsoftware"]
+	path = deps/avsoftware
+	url = git@github.com:lyft/avsoftware.git
