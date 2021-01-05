@@ -1,2 +1,2 @@
 # calibration_viewer
-WebGL viewer for AV calibration data
+Viewer for PLY files
