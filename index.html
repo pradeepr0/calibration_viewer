@@ -26,14 +26,15 @@
       /* IE6-9 */
     }
 
-    .error {
+    .msg {
       background-color: #fff1;
       border-radius: 5px;
       color: #df487f;
       font-family: 'Inconsolata', Courier, monospace;
       font-size: 16px;
-      margin: 50px auto;
-      padding: 50px;
+      margin: 12px 25px 12px 120px;
+      padding: 20px;
+      text-align: right;
     }
 
     #banner {
@@ -57,8 +58,7 @@
     }
 
     #container {
-      display: flex;
-      align-items: stretch;
+      display: flexbox;
     }
 
     #canvas {
@@ -72,6 +72,7 @@
     PLY Viewer
   </div>
   <div id="container">
+    <div id="messages"></div>
     <div id="canvas"></div>
   </div>
 
@@ -94,15 +95,24 @@
     /// specified objects only.
     var geometriesLoadedFromPLY = [];
 
+    function addInlineNotification(str) {
+      $('#messages').append($(`<div class="msg">${str}</div>`));
+    }
+
+    function clearInlineNotifications(str) {
+      $('#messages').empty();
+    }
+
     window.onload = function () {
       const newLoadPlyPromise = function (url) {
+        addInlineNotification("Loading: " + url + " ...")
         return new Promise(function (onSuccess, onError) {
           new THREE.PLYLoader().load(url,
             onSuccess,
             null,
             function (err) {
               $('#canvas').hide();
-              $('#container').append($(`<div class="error">Failed to load: ${url}</div>`));
+              addInlineNotification("Failed to load: " + url);
               console.error("Failed to load: " + url, err);
             }
           )
@@ -113,6 +123,7 @@
       const basePath = urlParams.get('base') || '';
       const promises = urlParams.getAll('f').map((path) => newLoadPlyPromise(basePath + '/' + path));
       Promise.all(promises).then(function (resultArray) {
+        clearInlineNotifications();
         geometriesLoadedFromPLY = geometriesLoadedFromPLY.concat(resultArray);
         init();
         renderScene();
@@ -139,9 +150,6 @@
       camera = new THREE.PerspectiveCamera(35, canvas.clientWidth / window.innerHeight, 1, 10000);
       camera.position.z = 50;
       scene.add(camera);
-
-      var ambientLight = new THREE.AmbientLight(0xffffff);
-      scene.add(ambientLight);
 
       var axes = new THREE.AxesHelper(2);
       axes.translateX(1e-4);
