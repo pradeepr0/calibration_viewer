@@ -27,13 +27,13 @@
     }
 
     .msg {
-      background-color: #fff1;
+      border-bottom: solid 0.1px #fff1;
       border-radius: 5px;
       color: #df487f;
       font-family: 'Inconsolata', Courier, monospace;
       font-size: 16px;
-      margin: 12px 25px 12px 120px;
-      padding: 20px;
+      margin: 10px 25px 10px 240px;
+      padding: 2px;
       text-align: right;
     }
 
@@ -112,7 +112,7 @@
             null,
             function (err) {
               $('#canvas').hide();
-              addInlineNotification("Failed to load: " + url);
+              addInlineNotification("Failed to load: " + url + " !");
               console.error("Failed to load: " + url, err);
             }
           )
