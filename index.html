@@ -2,228 +2,197 @@
 <html lang="en">
 
 <head>
-<title>Calibration Viewer</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-<link href="https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap" rel="stylesheet">
-<style>
+  <title>PLY Viewer</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <style>
     body {
-        margin: 0;
-        width: 100%;
-        height: 100%;
+      margin: 0;
+      width: 100%;
+      height: 100%;
 
-        background: #11e8bb; /* Old browsers */
-        background: -moz-linear-gradient(top,  #11e8bb 0%, #8200c9 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top,  #11e8bb 0%,#8200c9 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom,  #160016 0%,#160000 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#11e8bb', endColorstr='#8200c9',GradientType=0 ); /* IE6-9 */
+      background: #11e8bb;
+      /* Old browsers */
+      background: -moz-linear-gradient(top, #11e8bb 0%, #8200c9 100%);
+      /* FF3.6-15 */
+      background: -webkit-linear-gradient(top, #11e8bb 0%, #8200c9 100%);
+      /* Chrome10-25,Safari5.1-6 */
+      background: linear-gradient(to bottom, #160016 0%, #160000 100%);
+      /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#11e8bb', endColorstr='#8200c9', GradientType=0);
+      /* IE6-9 */
     }
+
+    .error {
+      background-color: #fff1;
+      border-radius: 5px;
+      color: #df487f;
+      font-family: 'Inconsolata', Courier, monospace;
+      font-size: 16px;
+      margin: 50px auto;
+      padding: 50px;
+    }
+
     #banner {
-        font-family: 'Roboto Slab', serif;
-        width: 100%;
-        height: 26px;
-        color: #df487f;
-        padding: 15px;
-        font-size: 18px;
-        font-weight: 600;
-        /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#441627+0,350514+50,4b0d1d+100 */
-        background: #441627; /* Old browsers */
-        background: -moz-linear-gradient(top,  #441627 0%, #350514 50%, #4b0d1d 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top,  #441627 0%,#350514 50%,#4b0d1d 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom,  #441627 0%,#350514 50%,#4b0d1d 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#441627', endColorstr='#4b0d1d',GradientType=0 ); /* IE6-9 */
+      font-family: 'Roboto Slab', serif;
+      height: 26px;
+      color: #df487f;
+      padding: 15px;
+      font-size: 18px;
+      font-weight: 600;
+      /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#441627+0,350514+50,4b0d1d+100 */
+      background: #441627;
+      /* Old browsers */
+      background: -moz-linear-gradient(top, #441627 0%, #350514 50%, #4b0d1d 100%);
+      /* FF3.6-15 */
+      background: -webkit-linear-gradient(top, #441627 0%, #350514 50%, #4b0d1d 100%);
+      /* Chrome10-25,Safari5.1-6 */
+      background: linear-gradient(to bottom, #441627 0%, #350514 50%, #4b0d1d 100%);
+      /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#441627', endColorstr='#4b0d1d', GradientType=0);
+      /* IE6-9 */
     }
+
     #container {
-        display: flex;
-        align-items: stretch;
+      display: flex;
+      align-items: stretch;
     }
+
     #canvas {
-        width: 70%;
+      width: 100%;
     }
-    #source-frame {
-        width: 30%;
-        height: 100vh;
-        background: rgba(0.5, 0.5, 0.5, 0.25);
-        border-radius: 2px;
-    }
-    #source {
-        box-sizing: border-box;
-        background:transparent;
-        border: none;
-        color: white;
-        font-family: 'inconsolata', 'monaco', Monospace;
-        width: 100%;
-        height: 99vh;
-        font-size: 12px;
-        padding: 10px;
-    }
-</style>
+  </style>
 </head>
 
 <body>
-<div id="banner">
-Calibration Viewer
-</div>
-<div id="container">
+  <div id="banner">
+    PLY Viewer
+  </div>
+  <div id="container">
     <div id="canvas"></div>
-    <div id="source-frame">
-        <textarea id="source">
-        </textarea>
-    </div>
-</div>
+  </div>
 
 
-<script src="js/three.min.js"></script>
-<script src="js/WebGL.js"></script>
-<script src="js/stats.min.js"></script>
-<script src="js/TrackballControls.js"></script>
-<script src="js/SourceParser.js"></script>
+  <script src="js/three.min.js"></script>
+  <script src="js/WebGL.js"></script>
+  <script src="js/stats.min.js"></script>
+  <script src="js/TrackballControls.js"></script>
+  <script src="js/PLYLoader.js"></script>
 
-<script>
-if (WEBGL.isWebGLAvailable() === false) {
-    document.body.appendChild(WEBGL.getWebGLErrorMessage());
-}
+  <script>
+    if (WEBGL.isWebGLAvailable() === false) {
+      document.body.appendChild(WEBGL.getWebGLErrorMessage());
+    }
 
-var renderer, scene, camera, controls;
+    var renderer, scene, camera, controls;
 
-/// Keep track of user specified objects. Useful when the user changes
-/// object definitions and we need to specifically clear those user
-/// specified objects only.
-var renderedObjectsFromSource = [];
+    /// Keep track of user specified objects. Useful when the user changes
+    /// object definitions and we need to specifically clear those user
+    /// specified objects only.
+    var geometriesLoadedFromPLY = [];
 
-window.onload = function () {
-    function onResponse () {
-        document.getElementById('source').value = this.responseText;
+    window.onload = function () {
+      const newLoadPlyPromise = function (url) {
+        return new Promise(function (onSuccess, onError) {
+          new THREE.PLYLoader().load(url,
+            onSuccess,
+            null,
+            function (err) {
+              $('#canvas').hide();
+              $('#container').append($(`<div class="error">Failed to load: ${url}</div>`));
+              console.error("Failed to load: " + url, err);
+            }
+          )
+        });
+      };
+
+      const urlParams = new URLSearchParams(document.location.search);
+      const basePath = urlParams.get('base') || '';
+      const promises = urlParams.getAll('f').map((path) => newLoadPlyPromise(basePath + '/' + path));
+      Promise.all(promises).then(function (resultArray) {
+        geometriesLoadedFromPLY = geometriesLoadedFromPLY.concat(resultArray);
         init();
         renderScene();
         animate();
+      }, function (err) {
+        console.error("Could not load all files!", err);
+      });
     }
 
-    var xhrq = new XMLHttpRequest();
-    xhrq.addEventListener("load", onResponse);
-    xhrq.open("GET", "/CalibrationViewer/definitions_source.txt");
-    xhrq.send();
-}
+    function init() {
+      const canvas = document.getElementById('canvas');
 
-///
-/// Parse the contents of the `#source` text-area and populate scene
-/// objects
-///
-function createSceneObjectsFromSource() {
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio((window.devicePixelRatio) ? window.devicePixelRatio : 1);
+      renderer.setSize(canvas.clientWidth, window.innerHeight);
+      renderer.autoClear = false;
+      renderer.setClearColor(0x000000, 0.0);
+      renderer.gammaInput = true;
+      renderer.gammaOutput = true;
+      canvas.appendChild(renderer.domElement);
 
-    // Helpers
-    //
-    const disposeArray = function() { this.array = null; }
+      scene = new THREE.Scene();
 
-    function createPointCloudObject(vertices, format) {
-        console.assert(format === 'xyz');
-        var pointsGeometry = new THREE.BufferGeometry();
-        pointsGeometry.addAttribute('position', new THREE.Float32BufferAttribute(vertices.flat(), 3).onUpload(disposeArray));
-        pointsGeometry.computeBoundingSphere();
+      camera = new THREE.PerspectiveCamera(35, canvas.clientWidth / window.innerHeight, 1, 10000);
+      camera.position.z = 50;
+      scene.add(camera);
 
-        return new THREE.Points(pointsGeometry, new THREE.PointsMaterial({ size: 0.05, color: 0x888888 }));
+      var ambientLight = new THREE.AmbientLight(0xffffff);
+      scene.add(ambientLight);
+
+      var axes = new THREE.AxesHelper(2);
+      axes.translateX(1e-4);
+      axes.translateY(1e-4);
+      axes.translateZ(1e-4);
+      scene.add(axes);
+
+      var gridHelper = new THREE.GridHelper(50, 50, 0x1b020a, 0x1b020a);
+      gridHelper.geometry.rotateX(Math.PI / 2);
+      scene.add(gridHelper);
+
+      for (const geometry of geometriesLoadedFromPLY) {
+        geometry.computeBoundingSphere();
+        const material = new THREE.PointsMaterial({ size: 0.05, vertexColors: true });
+        scene.add(new THREE.Points(geometry, material));
+      }
+
+      controls = new THREE.TrackballControls(camera, renderer.domElement);
+      controls.minDistance = 2.0;
+      controls.maxDistance = 2000.0;
+      controls.dynamicDampingFactor = 0.3;
+      controls.addEventListener('change', renderScene);
+
+      window.addEventListener('resize', onWindowResize, false);
+    };
+
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
     }
 
-    // Render defined objects
-    //
-    for (let c of renderedObjectsFromSource) {
-        scene.remove(c);
+    function onWindowResize() {
+      camera.aspect = canvas.clientWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(canvas.clientWidth, window.innerHeight);
+      renderScene();
     }
-    renderedObjectsFromSource = [];
 
-    const sourceLines = document.getElementById('source').value;
-    const definitions = new SourceParser(sourceLines).parse();
-    const frameObjects = {};
-
-    for (const def of definitions) {
-        if (def instanceof FrameDefinition) {
-            const frameAxes = new THREE.AxesHelper(0.05);
-            frameAxes.matrix.set(...def.transform.flat());
-            frameAxes.matrixAutoUpdate = false;
-            frameObjects[def.name] = frameAxes;
-            scene.add(frameAxes);
-            renderedObjectsFromSource.push(frameAxes);
-        }
-        if (def instanceof SceneObjectDefinition) {
-            if (def.format === 'OBJ') {
-                const obj = new WavefrontOBJParser(def.data).parse();
-                const pointsObject = createPointCloudObject(obj.vertices, 'xyz');
-                pointsObject.parent = frameObjects[def.frame];
-                scene.add(pointsObject);
-                renderedObjectsFromSource.push(pointsObject);
-            }
-        }
+    function renderScene() {
+      renderer.clear();
+      renderer.render(scene, camera);
     }
-}
 
-function init() {
-    const canvas = document.getElementById('canvas');
-
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio((window.devicePixelRatio) ? window.devicePixelRatio : 1);
-    renderer.setSize(canvas.clientWidth, window.innerHeight);
-    renderer.autoClear = false;
-    renderer.setClearColor(0x000000, 0.0);
-    renderer.gammaInput = true;
-    renderer.gammaOutput = true;
-    canvas.appendChild(renderer.domElement);
-
-    scene = new THREE.Scene();
-
-    camera = new THREE.PerspectiveCamera(35, canvas.clientWidth / window.innerHeight, 1, 10000);
-    camera.position.z = 8;
-    scene.add(camera);
-
-    var ambientLight = new THREE.AmbientLight(0xffffff);
-    scene.add(ambientLight);
-
-    // var axes = new THREE.AxesHelper(2);
-    // scene.add(axes);
-
-    var gridHelper = new THREE.GridHelper(50, 50, 0x000000, 0x1b020a);
-    gridHelper.geometry.rotateX( Math.PI / 2 );
-    scene.add(gridHelper);
-
-    createSceneObjectsFromSource();
-
-    controls = new THREE.TrackballControls(camera, renderer.domElement);
-    controls.minDistance = 2.0;
-    controls.maxDistance = 2000.0;
-    controls.dynamicDampingFactor = 0.3;
-    controls.addEventListener('change', renderScene);
-
-    window.addEventListener('resize', onWindowResize, false);
-};
-
-function animate() {
-    requestAnimationFrame(animate);
-    controls.update();
-}
-
-function onWindowResize() {
-    camera.aspect = canvas.clientWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(canvas.clientWidth, window.innerHeight);
-    renderScene();
-}
-
-function renderScene() {
-    renderer.clear();
-    renderer.render(scene, camera);
-}
-
-document.addEventListener('keypress', function(e) {
-    if (e.ctrlKey && (e.charCode == 13)) {
+    document.addEventListener('keypress', function (e) {
+      if (e.ctrlKey && (e.charCode == 13)) {
         createSceneObjectsFromSource();
         renderScene();
-    }
-});
+      }
+    });
 
-document.getElementById('source').addEventListener('dblclick', function(e) {
-    createSceneObjectsFromSource();
-    renderScene();
-});
-
-</script>
+  </script>
 </body>
+
 </html>
